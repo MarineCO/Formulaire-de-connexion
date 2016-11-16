@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
+var bcrypt = require('bcrypt');
 
 var app = express();
 
@@ -9,19 +10,28 @@ app.use(bodyParser.json());
 
 
 app.post('/login', function(req, res) {
-	console.log(req.body);
 
 	var user = 'Marine';
 	var password = 'mdp';
 	var connect = {err: false, message: 'Vous êtes connectée'}
 	var error = {err: true, message: 'Erreur d\'identifiant ou de mot de passe'}
 
-	if (req.body.user === user && req.body.password === password) {
-		res.send(connect.err);
-	}
-	else {
-		res.send(error.err);
-	}
+	const saltRounds = 10;
+
+	bcrypt.genSalt(saltRounds, function(err, salt) {
+		bcrypt.hash(password, saltRounds, function(err, hash) {
+			bcrypt.compare(req.body.password, hash, function(err, response) {
+				if (req.body.user === user && response) {
+					res.send(connect.err);
+				}
+				else {
+					res.send(error.err);
+				}
+			})
+
+		});
+	});
+
 })
 
 app.listen(3003, function() {
