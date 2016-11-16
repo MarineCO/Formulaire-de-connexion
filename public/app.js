@@ -16,13 +16,10 @@
 
 		submit: function() {
 			var user = $('#user').val();
-			console.log(user);
-
 			var password = $('#password').val();
-			console.log(password);
 
 			$.ajax({
-				url: '/checkInfo',
+				url: '/login',
 				type: 'POST',
 				data: {
 					'user' : user,
@@ -30,24 +27,22 @@
 				},
 				dataType: 'html'
 			})
-			.done(function() {
-				console.log('success');
+			.done(function(data) {
+
+				if (data === 'true') {
+					$('#error').html('<div class="ui negative message">' + "Erreur d\'identifiant ou mot de passe" + '</div>');
+				}  
+				else {
+					$('html').html('Vous êtes connectée');
+				}			
 			})
 			.fail(function() {
 				console.log('fail');
 			});
-
 		},
-
-		display: function() {
-			// vider les input - remettre tt à 0
-		},
-
-
-
 	};
 
 	$(document).ready(function(){
 		app.init();
 	});
-})();  
+})();  ''

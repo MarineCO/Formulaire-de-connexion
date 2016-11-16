@@ -8,27 +8,21 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json());
 
 
-app.post('/checkInfo', function(req, res) {
+app.post('/login', function(req, res) {
 	console.log(req.body);
 
 	var user = 'Marine';
 	var password = 'mdp';
+	var connect = {err: false, message: 'Vous êtes connectée'}
+	var error = {err: true, message: 'Erreur d\'identifiant ou de mot de passe'}
 
-	if (req.body.user == user && req.body.password == password) {
-		console.log('Connexion réussi')
+	if (req.body.user === user && req.body.password === password) {
+		res.send(connect.err);
 	}
 	else {
-		console.log('Erreur d\'utilisateur ou de mot de passe')
+		res.send(error.err);
 	}
-
 })
-
-
-
-
-
-
-
 
 app.listen(3003, function() {
 	console.log('Listen');
